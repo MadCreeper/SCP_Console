@@ -30,17 +30,18 @@ def get_scp(scpid): # gets SCP file from Internet
     try:
         res = urllib.request.urlopen(url)
         html = res.read().decode('utf-8')
-        return html
-    except:
+    except(urllib.error.HTTPError):
         print(scpid + 'Load FAILED!')
         return FAIL_READ    
     else:
-        print(scpid + 'Load Success')
+        print(scpid + ' Load Success!\n')
+        return html
     
     
 def batch_load(l,r):
     for i in range(l,r+1):
-        get_scp('scp-'+str(i))
+        docu = get_scp('scp-'+str(i))
+        record_log('scp-'+str(i),docu)
 
 def output_raw_scp_file(html): # Output the main files, ignore the rest
     
@@ -82,12 +83,16 @@ while(1):
             output_raw_scp_file(scp_html)
             record_log(scp_id,scp_html)
 
-    if(get_kth_word(1,inputLine) == 'batch'):
-        lpos = int(get_kth_word(2,inputLine))
-        rpos = int(get_kth_word(3,inputLine))
-        batch_load(lpos,rpos)
-    if(get_kth_word(1,inputLine) == 'exit'):
-        print("Exiting System.")
-        time.sleep(2)
-        break
+    elif(get_kth_word(1,inputLine) == 'batch'):
+            lpos = int(get_kth_word(2,inputLine))
+            rpos = int(get_kth_word(3,inputLine))
+            batch_load(lpos,rpos)
+        
+    elif(get_kth_word(1,inputLine) == 'exit'):
+            print("Exiting System.")
+            time.sleep(2)
+            break
+    
+    else:
+        print("Unknown Command or wrong syntax.Type'help' for help")
     print(INTERVAL)
