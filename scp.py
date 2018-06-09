@@ -39,9 +39,15 @@ def get_scp(scpid): # gets SCP file from Internet
     
     
 def batch_load(l,r):
+    head = 'scp-'
     for i in range(l,r+1):
-        docu = get_scp('scp-'+str(i))
-        record_log('scp-'+str(i),docu)
+        if(1<=i and i<=9):
+            head = 'scp-' + '00'
+        if(10<=i and i<=99):
+            head = 'scp-' + '0'
+
+        docu = get_scp(head+str(i))
+        record_log(head+str(i),docu)
 
 def output_raw_scp_file(html): # Output the main files, ignore the rest
     
